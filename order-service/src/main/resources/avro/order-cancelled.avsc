@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "OrderCanceledEvent",
+  "namespace": "com.logistics.order.avro.v1",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "reason",
+      "type": "string"
+    }
+  ]
+}

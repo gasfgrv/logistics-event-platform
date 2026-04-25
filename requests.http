@@ -1,0 +1,38 @@
+@baseUrl = http://localhost:8082
+@version = v1
+
+### Localstadk - dynamo
+
+GET http://localhost:4566/_localstack/health HTTP/1.1
+
+### Schema registry
+GET http://localhost:8081/subjects HTTP/1.1
+
+### Kafka UI
+GET http://localhost:9090 HTTP/1.1
+
+### Swagger
+GET {{baseUrl}}/{{version}}/docs HTTP/1.1
+
+### Swagger UI
+GET {{baseUrl}}/{{version}}/docs/ui HTTP/1.1
+
+### Create order
+POST {{baseUrl}}/{{version}}/orders/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "customer_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "origin": "01001-000",
+  "destination": "08223-000",
+  "weight": 10
+}
+
+### Cancel order
+PUT {{baseUrl}}/{{version}}/orders/cancel HTTP/1.1
+Content-Type: application/json
+
+{
+    "order_id": "5314d9b3-9772-459f-b9c6-0de5c6b51ab1",
+    "reason": "testing order cancellation"
+}
