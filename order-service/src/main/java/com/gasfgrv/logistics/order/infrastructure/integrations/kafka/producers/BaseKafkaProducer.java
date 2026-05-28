@@ -11,6 +11,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Component
@@ -20,11 +21,17 @@ public class BaseKafkaProducer {
     private final KafkaTemplate<String, SpecificRecord> kafkaTemplate;
     private final CurrentTimeProvider timeProvider;
 
-    public void send(String topic, String key, SpecificRecord payload, String eventType, String eventId) {
+    public CompletableFuture<SendResult<String, SpecificRecord>> send(
+            String topic,
+            String key,
+            SpecificRecord payload,
+            String eventType,
+            String eventId
+    ) {
         log.info("Sending message to topic: {}", topic);
         var record = new ProducerRecord<>(topic, key, payload);
         enrichHeaders(eventType, eventId, record);
-        kafkaTemplate.send(record)
+        return kafkaTemplate.send(record)
                 .whenComplete(BaseKafkaProducer::printSendStatus);
     }
 
@@ -37,7 +44,7 @@ public class BaseKafkaProducer {
 
     private static void printSendStatus(SendResult<String, SpecificRecord> result, Throwable ex) {
         if (ex != null) {
-            log.info("Error sending message: {}", ex.getMessage());
+            log.error("Error sending message: {}", ex.getMessage());
             throw new KafkaProduceMessageException(ex.getMessage());
         }
 

@@ -4,9 +4,7 @@ import com.gasfgrv.logistics.order.domain.models.order.Order;
 import com.gasfgrv.logistics.order.infrastructure.configurations.properties.KafkaTopicsProperties;
 import com.gasfgrv.logistics.order.infrastructure.containers.KafkaTestcontainersConfiguration;
 import com.gasfgrv.logistics.order.infrastructure.mappers.OrderMapper;
-import com.logistics.order.avro.v1.OrderCreatedEvent;
-import org.instancio.Instancio;
-import org.instancio.Select;
+import com.logistics.order.avro.v1.OrderCanceledEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +21,10 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Import(KafkaTestcontainersConfiguration.class)
-class OrderCreatedProducerTest {
+class OrderCancelledProducerTest {
 
     @Autowired
-    private OrderCreatedProducer orderCreatedProducer;
+    private OrderCancelledProducer orderCancelledProducer;
 
     @MockitoSpyBean
     private BaseKafkaProducer baseKafkaProducer;
@@ -38,33 +36,29 @@ class OrderCreatedProducerTest {
     private KafkaTopicsProperties topics;
 
     @Test
-    @DisplayName("Should send message through Kafka infrastructure")
+    @DisplayName("Should send cancelled message through Kafka infrastructure")
     void shouldSendMessageThroughKafkaInfra() {
         // Arrange
-        Order order = Instancio.of(Order.class)
-                .set(Select.field(Order::getId), UUID.randomUUID())
-                .create();
+        Order order = Order.builder()
+                .id(UUID.randomUUID())
+                .build();
+        String reason = "Cancelled by user";
+        OrderCanceledEvent event = OrderCanceledEvent.newBuilder()
+                .setOrderId(order.getIdValue())
+                .setReason(reason)
+                .build();
 
-        String pattern = "#d#d#d#d#d-#d#d#d";
-        OrderCreatedEvent event = Instancio.of(OrderCreatedEvent.class)
-                .set(Select.field(OrderCreatedEvent::getOrderId), order.getId().toString())
-                .set(Select.field(OrderCreatedEvent::getCustomerId), UUID.randomUUID().toString())
-                .generate(Select.field(OrderCreatedEvent::getOrigin), gen -> gen.text().pattern(pattern))
-                .generate(Select.field(OrderCreatedEvent::getDestination), gen -> gen.text().pattern(pattern))
-                .generate(Select.field(OrderCreatedEvent::getWeight), gen -> gen.doubles().range(1.0, 100.0))
-                .create();
-
-        when(mapper.toCreatedEvent(order)).thenReturn(event);
+        when(mapper.toCanceledEvent(order, reason)).thenReturn(event);
 
         // Act
-        orderCreatedProducer.sendMessage(order);
+        orderCancelledProducer.sendMessage(order, reason);
 
         // Assert
         verify(baseKafkaProducer).send(
-                eq(topics.orderCreated()),
+                eq(topics.orderCancelled()),
                 eq(order.getIdValue()),
                 eq(event),
-                eq("ORDER_CREATED"),
+                eq("ORDER_CANCELLED"),
                 eq(order.getIdValue())
         );
     }
