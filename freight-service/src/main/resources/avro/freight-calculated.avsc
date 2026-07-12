@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "FreighCalculedEvent",
+  "namespace": "com.logistics.order.avro.v1",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "distanceKm",
+      "type": "double"
+    },
+    {
+      "name": "price",
+      "type": "double"
+    },
+    {
+      "name": "currency",
+      "type": "string"
+    }
+  ]
+}

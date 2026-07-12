@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "OrderCreatedEvent",
+  "namespace": "com.logistics.order.avro.v1",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "customerId",
+      "type": "string"
+    },
+    {
+      "name": "origin",
+      "type": "string"
+    },
+    {
+      "name": "destination",
+      "type": "string"
+    },
+    {
+      "name": "weight",
+      "type": "double"
+    }
+  ]
+}

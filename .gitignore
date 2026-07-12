@@ -37,6 +37,7 @@ build/
 .terraform/
 *.lock.hcl
 *.tfstate
+*.tfstate.backup
 
 ### docker volumes ###
 localstack_data/

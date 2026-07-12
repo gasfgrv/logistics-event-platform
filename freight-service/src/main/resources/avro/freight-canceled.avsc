@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "FreightCaceledEvent",
+  "namespace": "com.logistics.order.avro.v1",
+  "fields": [
+    {
+      "name": "orderId",
+      "type": "string"
+    },
+    {
+      "name": "errorCode",
+      "type": "string"
+    },
+    {
+      "name": "errorMessage",
+      "type": "string"
+    }
+  ]
+}

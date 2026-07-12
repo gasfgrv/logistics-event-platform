@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: freight-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
+    properties:
+      auto:
+        register:
+          schemas: true
+    producer:
+      acks: all
+      retries: 50
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        retry:
+          backoff:
+            ms: 250
+        schema:
+          registry:
+            url: ${KAFKA_SCHEMA_REGISTRY:http://localhost:8081}
+        specific:
+          avro:
+            reader: true
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
+      group-id: freight-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      auto-offset-reset: earliest
+      max-poll-records: 100
+      properties:
+        schema:
+          registry:
+            url: ${KAFKA_SCHEMA_REGISTRY:http://localhost:8081}
+          specific:
+            avro:
+              reader: true
+
+server:
+  port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+aws:
+  dynamo:
+    service-endpoint: ${SERVICE_ENDPOINT:http://localhost:4566}
+    region: ${REGION:us-east-1}
+    access-key: ${ACCESS_KEY}
+    secret-key: ${SECRET_KEY}
+
+kafka:
+  topics:
+    order-created: order.created
+    order-cancelled: order.cancelled
+    freight-calculated: freight.calculated
+    freight-failed: freight.failed
