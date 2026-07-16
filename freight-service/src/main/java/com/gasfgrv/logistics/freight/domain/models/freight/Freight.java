@@ -27,4 +27,8 @@ public class Freight {
         this.status = FreightStatus.FAILED;
     }
 
+    public void setAsCancelled() {
+        this.status = FreightStatus.CANCELLED;
+    }
+
 }

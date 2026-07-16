@@ -10,6 +10,7 @@ import java.util.Arrays;
 public enum FreightStatus {
 
     CALCULATED("calculated"),
+    CANCELLED("cancelled"),
     FAILED("failed");
 
     @Getter
