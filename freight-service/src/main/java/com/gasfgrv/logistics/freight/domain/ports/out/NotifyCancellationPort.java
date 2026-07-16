@@ -4,6 +4,6 @@ import com.gasfgrv.logistics.freight.domain.models.freight.Freight;
 
 public interface NotifyCancellationPort {
 
-    void notifyFailure(Freight freight);
+    void notifyCancellation(Freight freight);
 
 }
