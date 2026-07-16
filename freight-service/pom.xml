@@ -183,14 +183,12 @@
                     <threads>4</threads>
                     <mutationThreshold>100</mutationThreshold>
                     <targetClasses>
-                        <param>com.gasfgrv.logistics.freight.application.usecases.*</param>
-                        <param>com.gasfgrv.logistics.freight.domain.services.*</param>
-                        <param>com.gasfgrv.logistics.freight.infrastructure.adapters.*</param>
+                        <param>com.gasfgrv.logistics.freight.domain.*</param>
+                        <param>com.gasfgrv.logistics.freight.application.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>com.gasfgrv.logistics.freight.application.usecases.*</param>
-                        <param>com.gasfgrv.logistics.freight.domain.services.*</param>
-                        <param>com.gasfgrv.logistics.freight.infrastructure.adapters.*</param>
+                        <param>com.gasfgrv.logistics.freight.domain.*</param>
+                        <param>com.gasfgrv.logistics.freight.application.*</param>
                     </targetTests>
                 </configuration>
             </plugin>
