@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class Freight {
     private double distanceKm;
     private BigDecimal price;
     private FreightStatus status;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     public void setAsFailed() {
         this.status = FreightStatus.FAILED;

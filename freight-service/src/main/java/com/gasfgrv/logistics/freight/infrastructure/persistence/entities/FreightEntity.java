@@ -7,6 +7,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Setter
@@ -18,7 +19,7 @@ public class FreightEntity {
     private double distanceKm;
     private BigDecimal price;
     private FreightStatus status;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("freight_id")
@@ -49,7 +50,7 @@ public class FreightEntity {
 
     @DynamoDbAttribute("created_at")
     @DynamoDbConvertedBy(LocalDateTimeAttributeConverter.class)
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 }
