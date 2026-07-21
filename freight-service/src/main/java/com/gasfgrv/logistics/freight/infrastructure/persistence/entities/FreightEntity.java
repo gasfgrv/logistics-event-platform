@@ -1,7 +1,6 @@
 package com.gasfgrv.logistics.freight.infrastructure.persistence.entities;
 
 import com.gasfgrv.logistics.freight.domain.models.enuns.FreightStatus;
-import com.gasfgrv.logistics.freight.domain.models.order.Order;
 import com.gasfgrv.logistics.freight.infrastructure.persistence.converters.LocalDateTimeAttributeConverter;
 import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
@@ -15,7 +14,7 @@ import java.util.UUID;
 public class FreightEntity {
 
     private UUID id;
-    private Order order;
+    private UUID order;
     private double distanceKm;
     private BigDecimal price;
     private FreightStatus status;
@@ -29,7 +28,7 @@ public class FreightEntity {
 
     @DynamoDbSortKey
     @DynamoDbAttribute("order_id")
-    public Order getOrder() {
+    public UUID getOrder() {
         return order;
     }
 
