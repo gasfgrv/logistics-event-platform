@@ -38,7 +38,7 @@ public class EntityMockFactory {
                 .generate(Select.field(Freight::getDistanceKm), gen -> gen.doubles().range(1.0, 100.0))
                 .generate(Select.field(Freight::getPrice), gen -> gen.math().bigDecimal().range(BigDecimal.ONE, BigDecimal.valueOf(1000L)).scale(2))
                 .set(Select.field(Freight::getStatus), FreightStatus.CALCULATED)
-                .generate(Select.field(Freight::getCreatedAt), gen -> gen.temporal().instant().past())
+                .generate(Select.field(Freight::getCreatedAt), gen -> gen.temporal().localDateTime().past())
                 .set(Select.field(Freight::getOrder), order)
                 .create();
     }
