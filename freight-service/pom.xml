@@ -180,15 +180,23 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <threads>4</threads>
+                    <threads>10</threads>
                     <mutationThreshold>100</mutationThreshold>
                     <targetClasses>
                         <param>com.gasfgrv.logistics.freight.domain.*</param>
                         <param>com.gasfgrv.logistics.freight.application.*</param>
+                        <param>com.gasfgrv.logistics.freight.infrastructure.*</param>
                     </targetClasses>
+                    <excludedClasses>
+                        <param>com.gasfgrv.logistics.freight.infrastructure.persistence.entities.*</param>
+                        <param>com.gasfgrv.logistics.freight.infrastructure.mappers.*</param>
+                        <param>com.gasfgrv.logistics.freight.infrastructure.configurations.*</param>
+                        <param>com.gasfgrv.logistics.freight.infrastructure.dtos.*</param>
+                    </excludedClasses>
                     <targetTests>
                         <param>com.gasfgrv.logistics.freight.domain.*</param>
                         <param>com.gasfgrv.logistics.freight.application.*</param>
+                        <param>com.gasfgrv.logistics.freight.infrastructure.*</param>
                     </targetTests>
                 </configuration>
             </plugin>
