@@ -6,7 +6,6 @@ import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -29,6 +28,7 @@ public class FreightEntity {
 
     @DynamoDbSortKey
     @DynamoDbAttribute("order_id")
+    @DynamoDbSecondaryPartitionKey(indexNames = "order_id-index")
     public UUID getOrder() {
         return order;
     }
