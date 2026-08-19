@@ -23,13 +23,20 @@ spring:
           avro:
             reader: true
     consumer:
-      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
       group-id: freight-service-group
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       auto-offset-reset: earliest
       max-poll-records: 100
       properties:
+        spring:
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: io.confluent.kafka.serializers.KafkaAvroDeserializer
         schema:
           registry:
             url: ${KAFKA_SCHEMA_REGISTRY:http://localhost:8081}
