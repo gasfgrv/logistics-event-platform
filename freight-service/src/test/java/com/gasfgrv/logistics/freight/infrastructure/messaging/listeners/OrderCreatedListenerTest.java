@@ -10,6 +10,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.instancio.Instancio;
 import org.instancio.Select;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,9 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @Import(value = {KafkaTestcontainersConfiguration.class, KafkaTestConfiguration.class})
@@ -62,8 +62,13 @@ class OrderCreatedListenerTest {
 
         await().atMost(Duration.ofSeconds(5))
                 .untilAsserted(() -> {
+                    ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
+
                     verify(mapper).toDomain(message.getPayload());
-                    verify(usecase).calculate(any(Order.class));
+                    verify(usecase).calculate(captor.capture());
+
+                    Order value = captor.getValue();
+                    assertEquals(message.getPayload().getOrderId(), value.getId().toString());
                 });
     }
 
@@ -96,8 +101,8 @@ class OrderCreatedListenerTest {
 
     private void sendEvent(GenericMessage<OrderCreatedEvent> message) {
         SendResult<String, SpecificRecord> sendResult = kafkaTemplate.send(message).join();
-        assertThat(sendResult.getRecordMetadata()).isNotNull();
-        assertThat(sendResult.getRecordMetadata().hasOffset()).isTrue();
+        assertNotNull(sendResult.getRecordMetadata());
+        assertTrue(sendResult.getRecordMetadata().hasOffset());
     }
 
 }
