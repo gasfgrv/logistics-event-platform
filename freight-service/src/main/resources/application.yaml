@@ -1,4 +1,7 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   application:
     name: freight-service
   kafka:
@@ -22,12 +25,15 @@ spring:
         specific:
           avro:
             reader: true
+    listener:
+      ack-mode: manual
     consumer:
       group-id: freight-service-group
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       auto-offset-reset: earliest
       max-poll-records: 100
+      enable-auto-commit: false
       properties:
         spring:
           deserializer:
