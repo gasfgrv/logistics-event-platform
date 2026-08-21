@@ -17,7 +17,7 @@ class OrderStatusTest {
             "failed,FAILED"
     })
     void shouldReturnEnumWhenReceivingCorrectValue(String input, String expectedName) {
-        OrderStatus result = OrderStatus.fromValue(input);
+        var result = OrderStatus.fromValue(input);
         assertEquals(expectedName, result.name());
     }
 
@@ -26,4 +26,5 @@ class OrderStatusTest {
     void mustThrowExceptionWhenIncorrectValue(String input) {
         assertThrows(InvalidStatusException.class, () -> OrderStatus.fromValue(input));
     }
+
 }

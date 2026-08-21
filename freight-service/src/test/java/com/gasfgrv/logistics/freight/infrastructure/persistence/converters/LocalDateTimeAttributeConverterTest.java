@@ -22,9 +22,9 @@ class LocalDateTimeAttributeConverterTest {
 
     @Test
     void shouldTransformFromLocalDateTimeToAttributeValue() {
-        LocalDateTime input = getInput();
+        var input = getInput();
 
-        AttributeValue result = converter.transformFrom(input);
+        var result = converter.transformFrom(input);
 
         assertNotNull(result);
         assertEquals(input.toString(), result.s());
@@ -32,10 +32,10 @@ class LocalDateTimeAttributeConverterTest {
 
     @Test
     void shouldTransformToLocalDateTimeFromAttributeValue() {
-        LocalDateTime expected = getInput();
-        AttributeValue input = AttributeValue.fromS(expected.toString());
+        var expected = getInput();
+        var input = AttributeValue.fromS(expected.toString());
 
-        LocalDateTime result = converter.transformTo(input);
+        var result = converter.transformTo(input);
 
         assertNotNull(result);
         assertEquals(expected, result);
@@ -43,32 +43,30 @@ class LocalDateTimeAttributeConverterTest {
 
     @Test
     void shouldReturnCorrectEnhancedType() {
-        EnhancedType<LocalDateTime> expected = EnhancedType.of(LocalDateTime.class);
+        var expected = EnhancedType.of(LocalDateTime.class);
 
-        EnhancedType<LocalDateTime> result = converter.type();
+        var result = converter.type();
 
         assertEquals(expected, result);
     }
 
     @Test
     void shouldReturnStringAttributeValueType() {
-        AttributeValueType expected = AttributeValueType.S;
+        var expected = AttributeValueType.S;
 
-        AttributeValueType result = converter.attributeValueType();
+        var result = converter.attributeValueType();
 
         assertEquals(expected, result);
     }
 
     @Test
     void shouldThrowExceptionWhenTransformingNullLocalDateTime() {
-        LocalDateTime input = null;
-
-        assertThrows(NullPointerException.class, () -> converter.transformFrom(input));
+        assertThrows(NullPointerException.class, () -> converter.transformFrom(null));
     }
 
     @Test
     void shouldThrowExceptionWhenTransformingFromInvalidAttributeValue() {
-        AttributeValue input = AttributeValue.fromS("invalid-date");
+        var input = AttributeValue.fromS("invalid-date");
 
         assertThrows(Exception.class, () -> converter.transformTo(input));
     }

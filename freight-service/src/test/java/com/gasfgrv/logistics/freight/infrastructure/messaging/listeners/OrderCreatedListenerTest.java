@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
@@ -53,21 +52,21 @@ class OrderCreatedListenerTest {
 
     @Test
     void shouldConsumeOrderCreatedEvent() {
-        OrderCreatedEvent payload = buildPayload();
-        String eventId = payload.getOrderId().toString();
-        Map<String, Object> headers = buildHeaders(eventId);
+        var payload = buildPayload();
+        var eventId = payload.getOrderId().toString();
+        var headers = buildHeaders(eventId);
 
-        GenericMessage<OrderCreatedEvent> message = new GenericMessage<>(payload, headers);
+        var message = new GenericMessage<>(payload, headers);
         sendEvent(message);
 
         await().atMost(Duration.ofSeconds(5))
                 .untilAsserted(() -> {
-                    ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
+                    var captor = ArgumentCaptor.forClass(Order.class);
 
                     verify(mapper).toDomain(message.getPayload());
                     verify(usecase).calculate(captor.capture());
 
-                    Order value = captor.getValue();
+                    var value = captor.getValue();
                     assertEquals(message.getPayload().getOrderId(), value.getId().toString());
                 });
     }
@@ -84,7 +83,7 @@ class OrderCreatedListenerTest {
     }
 
     private Map<String, Object> buildHeaders(String eventId) {
-        Map<String, Object> headers = new HashMap<>();
+        var headers = new HashMap<String, Object>();
         headers.put(KafkaHeaders.TOPIC, topic);
         headers.put("eventId", eventId.getBytes(StandardCharsets.UTF_8));
         headers.put("eventType", "ORDER_CREATED".getBytes(StandardCharsets.UTF_8));
@@ -100,7 +99,7 @@ class OrderCreatedListenerTest {
     }
 
     private void sendEvent(GenericMessage<OrderCreatedEvent> message) {
-        SendResult<String, SpecificRecord> sendResult = kafkaTemplate.send(message).join();
+        var sendResult = kafkaTemplate.send(message).join();
         assertNotNull(sendResult.getRecordMetadata());
         assertTrue(sendResult.getRecordMetadata().hasOffset());
     }

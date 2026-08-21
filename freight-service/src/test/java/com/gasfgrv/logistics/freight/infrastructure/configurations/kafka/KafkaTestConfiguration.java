@@ -29,10 +29,10 @@ public class KafkaTestConfiguration {
 
     @Bean
     public KafkaProperties kafkaProperties(ConfluentKafkaContainer kafkaContainer, GenericContainer<?> schemaRegistryContainer) {
-        KafkaProperties properties = new KafkaProperties();
+        var properties = new KafkaProperties();
         properties.setBootstrapServers(List.of(kafkaContainer.getBootstrapServers()));
 
-        String schemaRegistryUrl = "http://%s:%d"
+        var schemaRegistryUrl = "http://%s:%d"
                 .formatted(schemaRegistryContainer.getHost(), schemaRegistryContainer.getMappedPort(8081));
         properties.getProperties().put("schema.registry.url", schemaRegistryUrl);
 
@@ -53,8 +53,8 @@ public class KafkaTestConfiguration {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> kafkaListenerContainerFactory(KafkaProperties properties) {
-        DefaultKafkaConsumerFactory<String, SpecificRecord> consumerFactory = new DefaultKafkaConsumerFactory<>(properties.buildConsumerProperties());
-        ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        var consumerFactory = new DefaultKafkaConsumerFactory<String, SpecificRecord>(properties.buildConsumerProperties());
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, SpecificRecord>();
         factory.setConsumerFactory(consumerFactory);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         factory.setRecordMessageConverter(new MessagingMessageConverter());

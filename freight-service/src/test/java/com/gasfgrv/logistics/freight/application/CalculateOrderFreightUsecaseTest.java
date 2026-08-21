@@ -64,8 +64,7 @@ class CalculateOrderFreightUsecaseTest {
 
     @Test
     void shouldNotifyFailureWhenHaveFailureToCalculateFreight(CapturedOutput output) {
-        CalculateFreightException exception = new CalculateFreightException("NOT_FOUND",
-                new RuntimeException("Mock Exception"));
+        var exception = new CalculateFreightException("NOT_FOUND", new RuntimeException("Mock Exception"));
         doThrow(exception).when(this.calculateFreightClient).calculateFreight(this.order);
 
         usecase.calculate(this.order);
@@ -83,7 +82,7 @@ class CalculateOrderFreightUsecaseTest {
         doReturn(this.freight).when(this.calculateFreightClient).calculateFreight(this.order);
         doThrow(RuntimeException.class).when(this.repository).saveFreight(this.freight);
 
-        ApplicationException exception = assertThrows(ApplicationException.class, () -> usecase.calculate(this.order));
+        var exception = assertThrows(ApplicationException.class, () -> usecase.calculate(this.order));
         assertInstanceOf(RuntimeException.class, exception.getCause());
         assertTrue(exception.getMessage().contains("Error while attempting to calculate freight"));
 

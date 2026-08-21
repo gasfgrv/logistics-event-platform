@@ -78,7 +78,7 @@ class CancellOrderFreightUsecaseTest {
         assertFalse(output.getOut().contains("Cannot cancel order freight: no freight has been calculated for order"));
         assertTrue(output.getOut().contains("Canceling order freight for order"));
 
-        Freight value = freightCaptor.getValue();
+        var value = freightCaptor.getValue();
         assertSame(this.freight, value);
         assertEquals(FreightStatus.CANCELLED, value.getStatus());
 

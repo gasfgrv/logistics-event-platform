@@ -24,7 +24,7 @@ public class LocalstackTestcontainersConfiguration {
 
     @Bean
     public DynamicPropertyRegistrar dynamicPropertyRegistrar(LocalStackContainer localStackContainer) {
-        String endpoint = localStackContainer.getEndpoint().toString();
+        var endpoint = localStackContainer.getEndpoint().toString();
         return registry -> {
             registry.add("aws.dynamo.service-endpoint", () -> endpoint);
             registry.add("aws.dynamo.region", localStackContainer::getRegion);

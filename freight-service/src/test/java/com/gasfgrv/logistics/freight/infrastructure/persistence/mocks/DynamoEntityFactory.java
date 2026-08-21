@@ -6,7 +6,7 @@ import com.gasfgrv.logistics.freight.infrastructure.persistence.entities.Freight
 public class DynamoEntityFactory {
 
     public static FreightEntity buildEntity(Freight freight) {
-        FreightEntity entity = new FreightEntity();
+        var entity = new FreightEntity();
         entity.setId(freight.getId());
         entity.setOrder(freight.getOrder().getId());
         entity.setDistanceKm(freight.getDistanceKm());

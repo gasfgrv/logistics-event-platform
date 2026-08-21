@@ -54,13 +54,13 @@ class FreightRepositoryAdapterTest {
     void shouldSaveFreight() {
         doReturn(freightEntity).when(repository).save(captor.capture());
 
-        Freight saved = adapter.saveFreight(freight);
+        var saved = adapter.saveFreight(freight);
 
         assertNotNull(saved);
         assertTrue(new ReflectionEquals(freight, "order").matches(saved));
         assertEquals(freight.getOrder().getId(), saved.getOrder().getId());
 
-        FreightEntity value = captor.getValue();
+        var value = captor.getValue();
         assertTrue(new ReflectionEquals(freightEntity).matches(value));
 
         verify(mapper).toDomain(freightEntity);
@@ -72,7 +72,7 @@ class FreightRepositoryAdapterTest {
     void shouldReturnFalseWhenFreightHasAlreadyBeenCalculatedForTheOrderIsEmpty() {
         doReturn(Optional.empty()).when(repository).findBySortKey(any(UUID.class));
 
-        boolean result = adapter.freightHasAlreadyBeenCalculatedForTheOrder(UUID.randomUUID());
+        var result = adapter.freightHasAlreadyBeenCalculatedForTheOrder(UUID.randomUUID());
 
         assertFalse(result);
 
@@ -83,7 +83,7 @@ class FreightRepositoryAdapterTest {
     void shouldReturnTrueWhenFreightHasAlreadyBeenCalculatedForTheOrderIsPresent() {
         doReturn(Optional.of(freightEntity)).when(repository).findBySortKey(any(UUID.class));
 
-        boolean result = adapter.freightHasAlreadyBeenCalculatedForTheOrder(UUID.randomUUID());
+        var result = adapter.freightHasAlreadyBeenCalculatedForTheOrder(UUID.randomUUID());
 
         assertTrue(result);
 
@@ -94,7 +94,7 @@ class FreightRepositoryAdapterTest {
     void shouldReturnEmptyWhenNotFoundByOrderId() {
         doReturn(Optional.empty()).when(repository).findBySortKey(any(UUID.class));
 
-        Optional<Freight> result = adapter.getFreightByOrder(UUID.randomUUID());
+        var result = adapter.getFreightByOrder(UUID.randomUUID());
 
         assertFalse(result.isPresent());
 
@@ -106,7 +106,7 @@ class FreightRepositoryAdapterTest {
     void shouldReturnFreightWhenFoundByOrderId() {
         doReturn(Optional.of(freightEntity)).when(repository).findBySortKey(any(UUID.class));
 
-        Optional<Freight> result = adapter.getFreightByOrder(UUID.randomUUID());
+        var result = adapter.getFreightByOrder(UUID.randomUUID());
 
         assertTrue(result.isPresent());
         assertTrue(new ReflectionEquals(freight, "order").matches(result.get()));

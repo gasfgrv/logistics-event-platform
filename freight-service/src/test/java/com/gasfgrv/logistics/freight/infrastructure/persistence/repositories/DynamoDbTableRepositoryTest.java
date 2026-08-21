@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Import;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -37,34 +36,39 @@ class DynamoDbTableRepositoryTest {
 
     @Test
     void shouldSaveEntity() {
-        FreightEntity entity = mapper.toEntity(EntityMockFactory.buildFreight(null));
+        var entity = mapper.toEntity(EntityMockFactory.buildFreight(null));
 
-        FreightEntity saved = repository.save(entity);
+        var saved = repository.save(entity);
 
         assertSame(entity, saved);
 
-        Consumer<Key.Builder> keyConsumer = key -> key.partitionValue(entity.getId().toString())
-                .sortValue(entity.getOrder().toString());
-        FreightEntity item = table.getItem(builder -> builder.key(keyConsumer));
+        var keyConsumer = getKeyConsumer(entity);
+        var item = table.getItem(builder -> builder.key(keyConsumer));
         assertNotNull(item);
         assertTrue(new ReflectionEquals(saved).matches(item));
     }
 
     @Test
     void shouldFindEntityBySortKeyWhenPresent() {
-        FreightEntity entity = mapper.toEntity(EntityMockFactory.buildFreight(null));
+        var entity = mapper.toEntity(EntityMockFactory.buildFreight(null));
         table.putItem(builder -> builder.item(entity));
 
-        Optional<FreightEntity> freight = repository.findBySortKey(entity.getOrder());
+        var freight = repository.findBySortKey(entity.getOrder());
 
         assertTrue(freight.isPresent());
     }
 
     @Test
     void shouldReturnEmptyOptionalWhenEntityNotFound() {
-        Optional<FreightEntity> freight = repository.findBySortKey(UUID.randomUUID());
+        var freight = repository.findBySortKey(UUID.randomUUID());
 
         assertTrue(freight.isEmpty());
+    }
+
+    private Consumer<Key.Builder> getKeyConsumer(FreightEntity entity) {
+        return key -> key
+                .partitionValue(entity.getId().toString())
+                .sortValue(entity.getOrder().toString());
     }
 
 }
