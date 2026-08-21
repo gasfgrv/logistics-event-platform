@@ -10,6 +10,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.converter.MessagingMessageConverter;
 
 import java.util.Map;
 
@@ -24,14 +25,11 @@ public class KafkaConfiguration {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> kafkaListenerContainerFactory(KafkaProperties properties) {
-        ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> containerFactory = new ConcurrentKafkaListenerContainerFactory<>();
-        containerFactory.setConsumerFactory(defaultConsumerFactory(properties));
-        return containerFactory;
-    }
-
-    private ConsumerFactory<String, SpecificRecord> defaultConsumerFactory(KafkaProperties properties) {
-        Map<String, Object> consumerProperties = properties.buildConsumerProperties();
-        return new DefaultKafkaConsumerFactory<>(consumerProperties);
+        DefaultKafkaConsumerFactory<String, SpecificRecord> consumerFactory = new DefaultKafkaConsumerFactory<>(properties.buildConsumerProperties());
+        ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory);
+        factory.setRecordMessageConverter(new MessagingMessageConverter());
+        return factory;
     }
 
 }
