@@ -192,6 +192,7 @@
                         <param>com.gasfgrv.logistics.freight.infrastructure.mappers.*</param>
                         <param>com.gasfgrv.logistics.freight.infrastructure.configurations.*</param>
                         <param>com.gasfgrv.logistics.freight.infrastructure.dtos.*</param>
+                        <param>com.gasfgrv.logistics.freight.infrastructure.messaging.listeners.*</param>
                     </excludedClasses>
                     <targetTests>
                         <param>com.gasfgrv.logistics.freight.domain.*</param>
