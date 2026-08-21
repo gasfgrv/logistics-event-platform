@@ -40,11 +40,17 @@ class OrderCreatedListenerTest {
     @Autowired
     private KafkaTemplate<String, SpecificRecord> kafkaTemplate;
 
+    @Autowired
+    private KafkaContainer kafkaContainer;
+
     @MockitoBean
     private CalculateOrderFreightUsecasePort usecase;
 
     @MockitoBean
     private OrderMapper mapper;
+
+    @MockitoBean
+    private org.springframework.boot.kafka.autoconfigure.KafkaProperties kafkaProperties;
 
     @Value("${kafka.topics.order-created}")
     private String topic;
@@ -64,6 +70,8 @@ class OrderCreatedListenerTest {
 
         Order orderDomain = Order.builder().id(UUID.randomUUID()).build();
         when(mapper.toDomain(any(OrderCreatedEvent.class))).thenReturn(orderDomain);
+
+        when(kafkaProperties.getBootstrapServers()).thenReturn(java.util.List.of(kafkaContainer.getBootstrapServers()));
 
         kafkaTemplate.send(message).join();
 
