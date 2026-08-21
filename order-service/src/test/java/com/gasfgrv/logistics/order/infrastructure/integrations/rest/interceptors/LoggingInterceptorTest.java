@@ -27,12 +27,12 @@ class LoggingInterceptorTest {
     @DisplayName("Should intercept request and wrap response")
     void shouldInterceptRequestAndWrapResponse() throws IOException {
         // Arrange
-        HttpRequest request = mock(HttpRequest.class);
-        ClientHttpRequestExecution execution = mock(ClientHttpRequestExecution.class);
-        ClientHttpResponse response = mock(ClientHttpResponse.class);
+        var request = mock(HttpRequest.class);
+        var execution = mock(ClientHttpRequestExecution.class);
+        var response = mock(ClientHttpResponse.class);
 
-        byte[] requestBody = "request".getBytes();
-        byte[] responseBody = "response".getBytes();
+        var requestBody = "request".getBytes();
+        var responseBody = "response".getBytes();
 
         when(request.getMethod()).thenReturn(HttpMethod.GET);
         when(request.getURI()).thenReturn(URI.create("http://localhost/test"));
@@ -41,10 +41,10 @@ class LoggingInterceptorTest {
         when(response.getStatusCode()).thenReturn(org.springframework.http.HttpStatus.OK);
         when(response.getBody()).thenReturn(new ByteArrayInputStream(responseBody));
 
-        LoggingInterceptor interceptor = new LoggingInterceptor();
+        var interceptor = new LoggingInterceptor();
 
         // Act
-        ClientHttpResponse result = interceptor.intercept(request, requestBody, execution);
+        var result = interceptor.intercept(request, requestBody, execution);
 
         // Assert
         assertThat(result).isInstanceOf(ClientHttpResponseWrapper.class);
@@ -57,11 +57,11 @@ class LoggingInterceptorTest {
     @DisplayName("Should preserve response body content in wrapper")
     void shouldPreserveResponseBodyContentInWrapper() throws IOException {
         // Arrange
-        HttpRequest request = mock(HttpRequest.class);
-        ClientHttpRequestExecution execution = mock(ClientHttpRequestExecution.class);
-        ClientHttpResponse response = mock(ClientHttpResponse.class);
+        var request = mock(HttpRequest.class);
+        var execution = mock(ClientHttpRequestExecution.class);
+        var response = mock(ClientHttpResponse.class);
 
-        byte[] responseBody = "response-body".getBytes();
+        var responseBody = "response-body".getBytes();
 
         when(request.getMethod()).thenReturn(HttpMethod.POST);
         when(request.getURI()).thenReturn(URI.create("http://localhost/test"));
@@ -70,11 +70,11 @@ class LoggingInterceptorTest {
         when(response.getStatusCode()).thenReturn(org.springframework.http.HttpStatus.OK);
         when(response.getBody()).thenReturn(new ByteArrayInputStream(responseBody));
 
-        LoggingInterceptor interceptor = new LoggingInterceptor();
+        var interceptor = new LoggingInterceptor();
 
         // Act
-        ClientHttpResponse wrapped = interceptor.intercept(request, new byte[] {}, execution);
-        byte[] actualBody = wrapped.getBody().readAllBytes();
+        var wrapped = interceptor.intercept(request, new byte[] {}, execution);
+        var actualBody = wrapped.getBody().readAllBytes();
 
         // Assert
         assertThat(actualBody).isEqualTo(responseBody);
@@ -84,11 +84,11 @@ class LoggingInterceptorTest {
     @DisplayName("Should call execution with same request and body")
     void shouldCallExecutionWithSameRequestAndBody() throws IOException {
         // Arrange
-        HttpRequest request = mock(HttpRequest.class);
-        ClientHttpRequestExecution execution = mock(ClientHttpRequestExecution.class);
-        ClientHttpResponse response = mock(ClientHttpResponse.class);
+        var request = mock(HttpRequest.class);
+        var execution = mock(ClientHttpRequestExecution.class);
+        var response = mock(ClientHttpResponse.class);
 
-        byte[] requestBody = "payload".getBytes();
+        var requestBody = "payload".getBytes();
 
         when(request.getMethod()).thenReturn(HttpMethod.PUT);
         when(request.getURI()).thenReturn(URI.create("http://localhost/test"));
@@ -97,7 +97,7 @@ class LoggingInterceptorTest {
         when(response.getStatusCode()).thenReturn(org.springframework.http.HttpStatus.OK);
         when(response.getBody()).thenReturn(new ByteArrayInputStream(new byte[] {}));
 
-        LoggingInterceptor interceptor = new LoggingInterceptor();
+        var interceptor = new LoggingInterceptor();
 
         // Act
         interceptor.intercept(request, requestBody, execution);
@@ -110,12 +110,12 @@ class LoggingInterceptorTest {
     @DisplayName("Should read response body only once from original response")
     void shouldReadResponseBodyOnlyOnceFromOriginalResponse() throws IOException {
         // Arrange
-        HttpRequest request = mock(HttpRequest.class);
-        ClientHttpRequestExecution execution = mock(ClientHttpRequestExecution.class);
-        ClientHttpResponse response = mock(ClientHttpResponse.class);
+        var request = mock(HttpRequest.class);
+        var execution = mock(ClientHttpRequestExecution.class);
+        var response = mock(ClientHttpResponse.class);
 
-        byte[] responseBody = "response".getBytes();
-        ByteArrayInputStream inputStream = spy(new ByteArrayInputStream(responseBody));
+        var responseBody = "response".getBytes();
+        var inputStream = spy(new ByteArrayInputStream(responseBody));
 
         when(request.getMethod()).thenReturn(HttpMethod.GET);
         when(request.getURI()).thenReturn(URI.create("http://localhost/test"));
@@ -124,7 +124,7 @@ class LoggingInterceptorTest {
         when(response.getStatusCode()).thenReturn(org.springframework.http.HttpStatus.OK);
         when(response.getBody()).thenReturn(inputStream);
 
-        LoggingInterceptor interceptor = new LoggingInterceptor();
+        var interceptor = new LoggingInterceptor();
 
         // Act
         interceptor.intercept(request, new byte[] {}, execution);

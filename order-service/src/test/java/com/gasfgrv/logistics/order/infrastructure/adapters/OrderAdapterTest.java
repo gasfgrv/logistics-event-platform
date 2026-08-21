@@ -52,8 +52,8 @@ class OrderAdapterTest {
     @DisplayName("OrderAdapter should save an order")
     void orderadapterShouldSaveAnOrder() {
         // Arrange
-        Order order = generateOrder();
-        OrdersEntity entity = generateEntity();
+        var order = generateOrder();
+        var entity = generateEntity();
 
         doReturn(entity).when(mapper).toEntity(order);
         doNothing().when(repository).save(entity);
@@ -63,11 +63,11 @@ class OrderAdapterTest {
 
         // Assert
         verify(mapper, times(1)).toEntity(orderCaptor.capture());
-        Order orderValue = orderCaptor.getValue();
+        var orderValue = orderCaptor.getValue();
         assertThat(orderValue).isEqualTo(order);
 
         verify(repository, times(1)).save(ordersEntityCaptor.capture());
-        OrdersEntity ordersEntityValue = ordersEntityCaptor.getValue();
+        var ordersEntityValue = ordersEntityCaptor.getValue();
         assertThat(ordersEntityValue).isEqualTo(entity);
     }
 
@@ -75,7 +75,7 @@ class OrderAdapterTest {
     @DisplayName("OrderAdapter should send the order for shipping")
     void orderAdapterShouldSendTheOrderForShipping() {
         // Arrange
-        Order order = generateOrder();
+        var order = generateOrder();
 
         doNothing().when(orderCreatedProducer).sendMessage(order);
 
@@ -84,7 +84,7 @@ class OrderAdapterTest {
 
         // Assert
         verify(orderCreatedProducer, times(1)).sendMessage(orderCaptor.capture());
-        Order value = orderCaptor.getValue();
+        var value = orderCaptor.getValue();
         assertThat(value).isEqualTo(order);
 
     }
@@ -93,8 +93,8 @@ class OrderAdapterTest {
     @DisplayName("OrderAdapter notifies you of the order cancellation")
     void orderAdapterNotifiesYouOfTheOrderCancellation() {
         // Arrange
-        Order order = generateOrder();
-        String reason = Instancio.gen().text().word().get();
+        var order = generateOrder();
+        var reason = Instancio.gen().text().word().get();
 
         doNothing().when(orderCancelledProducer).sendMessage(order, reason);
 
@@ -103,7 +103,7 @@ class OrderAdapterTest {
 
         // Assert
         verify(orderCancelledProducer, times(1)).sendMessage(orderCaptor.capture(), anyString());
-        Order value = orderCaptor.getValue();
+        var value = orderCaptor.getValue();
         assertThat(value).isEqualTo(order);
     }
 
@@ -111,15 +111,15 @@ class OrderAdapterTest {
     @DisplayName("OrderAdapter should return an order if one exists")
     void orderAdapterShouldReturnAnOrderIfOneExists() {
         // Arrange
-        UUID orderId = UUID.fromString(Instancio.gen().text().uuid().get());
-        OrdersEntity entity = generateEntity();
-        Order order = generateOrder();
+        var orderId = UUID.fromString(Instancio.gen().text().uuid().get());
+        var entity = generateEntity();
+        var order = generateOrder();
 
         doReturn(Optional.of(entity)).when(repository).query(orderId);
         doReturn(order).when(mapper).toDomain(entity);
 
         // Act
-        Optional<Order> orderInfo = adapter.getOrderInfo(orderId);
+        var orderInfo = adapter.getOrderInfo(orderId);
 
         // Assert
         verify(repository, times(1)).query(orderId);
@@ -131,11 +131,11 @@ class OrderAdapterTest {
     @DisplayName("OrderAdapter should return empty if there is no order")
     void orderAdapterShouldReturnEmptyIfThereIsNoOrder() {
         // Arrange
-        UUID orderId = UUID.fromString(Instancio.gen().text().uuid().get());
+        var orderId = UUID.fromString(Instancio.gen().text().uuid().get());
         doReturn(Optional.empty()).when(repository).query(orderId);
 
         // Act
-        Optional<Order> orderInfo = adapter.getOrderInfo(orderId);
+        var orderInfo = adapter.getOrderInfo(orderId);
 
         // Assert
         verify(repository, times(1)).query(orderId);

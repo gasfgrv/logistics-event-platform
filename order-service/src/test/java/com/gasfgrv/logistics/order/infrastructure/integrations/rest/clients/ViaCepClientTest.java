@@ -32,9 +32,9 @@ class ViaCepClientTest {
     @DisplayName("ViaCepClient must find a valid address and verify request details")
     void viacepclientMustFindAValidAddress() throws JsonProcessingException {
         // Arrange
-        String zipCode = "01310100";
-        String testUrl = "/%s/json".formatted(zipCode);
-        AddressResponseDto expectedResponse = new AddressResponseDto(
+        var zipCode = "01310100";
+        var testUrl = "/%s/json".formatted(zipCode);
+        var expectedResponse = new AddressResponseDto(
                 "01310-100",
                 "Avenida Paulista",
                 "de 612 a 1510 - lado par",
@@ -58,7 +58,7 @@ class ViaCepClientTest {
                         .withBody(objectMapper.writeValueAsString(expectedResponse))));
 
         // Act
-        AddressResponseDto actualResponse = viaCepClient.getAddress(zipCode);
+        var actualResponse = viaCepClient.getAddress(zipCode);
 
         // Assert
         assertThat(actualResponse).isNotNull();
@@ -73,8 +73,8 @@ class ViaCepClientTest {
     @DisplayName("ViaCepClient must handle the 'error' flag from ViaCep API (200 OK with erro:true)")
     void viacepclientMustHandleApiErrorFlag() throws Exception {
         // Arrange
-        String zipCode = "99999999";
-        AddressResponseDto errorResponse = new AddressResponseDto(
+        var zipCode = "99999999";
+        var errorResponse = new AddressResponseDto(
                 null,
                 null,
                 null,
@@ -98,7 +98,7 @@ class ViaCepClientTest {
                         .withBody(objectMapper.writeValueAsString(errorResponse))));
 
         // Act
-        AddressResponseDto response = viaCepClient.getAddress(zipCode);
+        var response = viaCepClient.getAddress(zipCode);
 
         // Assert
         assertThat(response.error()).isTrue();
@@ -108,7 +108,7 @@ class ViaCepClientTest {
     @DisplayName("ViaCepClient must throw ViaCepException for server-side errors (5xx)")
     void viacepclientMustThrowExceptionForHttp500Error() {
         // Arrange
-        String zipCode = "01001000";
+        var zipCode = "01001000";
 
         stubFor(get(urlEqualTo("/%s/json".formatted(zipCode)))
                 .willReturn(aResponse()
@@ -125,7 +125,7 @@ class ViaCepClientTest {
     @DisplayName("ViaCepClient must throw ViaCepException for client-side errors (4xx)")
     void viacepclientMustThrowExceptionForHttp400Error() {
         // Arrange
-        String zipCode = "invalid";
+        var zipCode = "invalid";
 
         stubFor(get(urlEqualTo("/%s/json".formatted(zipCode)))
                 .willReturn(aResponse()
@@ -141,7 +141,7 @@ class ViaCepClientTest {
     @DisplayName("ViaCepClient must handle malformed JSON responses")
     void viacepclientMustHandleMalformedJsonResponse() {
         // Arrange
-        String zipCode = "01001000";
+        var zipCode = "01001000";
 
         stubFor(get(urlEqualTo("/%s/json".formatted(zipCode)))
                 .willReturn(aResponse()
@@ -157,7 +157,7 @@ class ViaCepClientTest {
     @DisplayName("ViaCepClient must handle simulated network delay")
     void viacepclientMustHandleNetworkDelay() {
         // Arrange
-        String zipCode = "01001000";
+        var zipCode = "01001000";
 
         stubFor(get(urlEqualTo("/%s/json".formatted(zipCode)))
                 .willReturn(aResponse()

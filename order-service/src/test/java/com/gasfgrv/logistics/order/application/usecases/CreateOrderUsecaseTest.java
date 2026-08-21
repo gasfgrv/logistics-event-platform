@@ -45,8 +45,8 @@ class CreateOrderUsecaseTest {
     @DisplayName("UseCase should successfully create a new order")
     void usecaseSholdSuccessfullyCreateANewOrder() {
         // Arrange
-        Order order = instantiateOrder();
-        CreateOrderCommand command = instantiateCommand(order);
+        var order = instantiateOrder();
+        var command = instantiateCommand(order);
 
         Order orderCreated = Instancio.of(Order.class)
                 .set(Select.field(Order::getId), order.getId())
@@ -73,10 +73,10 @@ class CreateOrderUsecaseTest {
 
         verify(orderService).createNewOrder(command.order());
 
-        ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
+        var orderCaptor = ArgumentCaptor.forClass(Order.class);
         verify(orderService).saveOrder(orderCaptor.capture());
 
-        Order captured = orderCaptor.getValue();
+        var captured = orderCaptor.getValue();
         assertThat(captured).isNotNull();
         assertThat(captured.getStatus()).isEqualTo(OrderStatus.CREATED);
         assertThat(captured.getCreatedAt()).isBefore(LocalDateTime.now());
@@ -86,8 +86,8 @@ class CreateOrderUsecaseTest {
     @DisplayName("UseCase should throw an InvalidAddressException when there is an invalid address")
     void usecaseSholdThrowAnInvalidAddressExceptionWhenThereIsAnInvalidAddress() {
         // Arrange
-        Order order = instantiateOrder();
-        CreateOrderCommand command = instantiateCommand(order);
+        var order = instantiateOrder();
+        var command = instantiateCommand(order);
 
         doThrow(new InvalidAddressException())
                 .when(addressService).isValidAddress(anyString());

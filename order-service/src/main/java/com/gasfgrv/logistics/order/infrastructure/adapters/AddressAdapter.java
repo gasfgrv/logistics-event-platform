@@ -17,7 +17,7 @@ public class AddressAdapter implements AddressPort {
     @Override
     public boolean isAnExistingAddress(String zipCode) {
         log.info("Checking if the zip code {} belongs to a valid address", zipCode);
-        AddressResponseDto address = client.getAddress(zipCode);
+        var address = client.getAddress(zipCode);
         log.info(address.toString());
         return Boolean.FALSE.equals(address.error());
     }

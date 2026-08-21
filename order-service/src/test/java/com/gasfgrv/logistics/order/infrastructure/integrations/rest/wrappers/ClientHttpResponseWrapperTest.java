@@ -21,15 +21,15 @@ class ClientHttpResponseWrapperTest {
     @DisplayName("Should return status code from wrapped response")
     void shouldReturnStatusCodeFromWrappedResponse() throws IOException {
         // Arrange
-        ClientHttpResponse mockResponse = mock(ClientHttpResponse.class);
-        HttpStatusCode expectedStatus = HttpStatus.OK;
+        var mockResponse = mock(ClientHttpResponse.class);
+        var expectedStatus = HttpStatus.OK;
 
         when(mockResponse.getStatusCode()).thenReturn(expectedStatus);
 
-        ClientHttpResponseWrapper wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
+        var wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
 
         // Act
-        HttpStatusCode actualStatus = wrapper.getStatusCode();
+        var actualStatus = wrapper.getStatusCode();
 
         // Assert
         assertThat(actualStatus).isEqualTo(expectedStatus);
@@ -42,15 +42,15 @@ class ClientHttpResponseWrapperTest {
     @DisplayName("Should return status text from wrapped response")
     void shouldReturnStatusTextFromWrappedResponse() throws IOException {
         // Arrange
-        ClientHttpResponse mockResponse = mock(ClientHttpResponse.class);
-        String expectedText = "OK";
+        var mockResponse = mock(ClientHttpResponse.class);
+        var expectedText = "OK";
 
         when(mockResponse.getStatusText()).thenReturn(expectedText);
 
-        ClientHttpResponseWrapper wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
+        var wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
 
         // Act
-        String actualText = wrapper.getStatusText();
+        var actualText = wrapper.getStatusText();
 
         // Assert
         assertThat(actualText).isEqualTo(expectedText);
@@ -63,17 +63,17 @@ class ClientHttpResponseWrapperTest {
     @DisplayName("Should return body as new input stream with provided bytes")
     void shouldReturnBodyAsNewInputStreamWithProvidedBytes() throws IOException {
         // Arrange
-        ClientHttpResponse mockResponse = mock(ClientHttpResponse.class);
-        byte[] body = "test-body".getBytes();
+        var mockResponse = mock(ClientHttpResponse.class);
+        var body = "test-body".getBytes();
 
-        ClientHttpResponseWrapper wrapper = new ClientHttpResponseWrapper(mockResponse, body);
+        var wrapper = new ClientHttpResponseWrapper(mockResponse, body);
 
         // Act
-        InputStream inputStream1 = wrapper.getBody();
-        InputStream inputStream2 = wrapper.getBody();
+        var inputStream1 = wrapper.getBody();
+        var inputStream2 = wrapper.getBody();
 
-        byte[] read1 = inputStream1.readAllBytes();
-        byte[] read2 = inputStream2.readAllBytes();
+        var read1 = inputStream1.readAllBytes();
+        var read2 = inputStream2.readAllBytes();
 
         // Assert
         assertThat(read1).isEqualTo(body);
@@ -87,15 +87,15 @@ class ClientHttpResponseWrapperTest {
     @DisplayName("Should return headers from wrapped response")
     void shouldReturnHeadersFromWrappedResponse() {
         // Arrange
-        ClientHttpResponse mockResponse = mock(ClientHttpResponse.class);
-        HttpHeaders expectedHeaders = new HttpHeaders();
+        var mockResponse = mock(ClientHttpResponse.class);
+        var expectedHeaders = new HttpHeaders();
 
         when(mockResponse.getHeaders()).thenReturn(expectedHeaders);
 
-        ClientHttpResponseWrapper wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
+        var wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
 
         // Act
-        HttpHeaders actualHeaders = wrapper.getHeaders();
+        var actualHeaders = wrapper.getHeaders();
 
         // Assert
         assertThat(actualHeaders).isEqualTo(expectedHeaders);
@@ -108,8 +108,8 @@ class ClientHttpResponseWrapperTest {
     @DisplayName("Should delegate close to wrapped response")
     void shouldDelegateCloseToWrappedResponse() {
         // Arrange
-        ClientHttpResponse mockResponse = mock(ClientHttpResponse.class);
-        ClientHttpResponseWrapper wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
+        var mockResponse = mock(ClientHttpResponse.class);
+        var wrapper = new ClientHttpResponseWrapper(mockResponse, new byte[] {});
 
         // Act
         wrapper.close();

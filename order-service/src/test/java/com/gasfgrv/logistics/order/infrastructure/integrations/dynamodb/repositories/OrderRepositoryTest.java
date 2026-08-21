@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.GenericContainer;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,13 +51,13 @@ public class OrderRepositoryTest {
     @DisplayName("OrderRepository should save a new order in DynamoDb")
     void orderrepositoryShouldSaveANewOrderInDynamodb() throws IOException, InterruptedException {
         // Arrange
-        OrdersEntity order = generateNewOrder();
+        var order = generateNewOrder();
 
         // Act
         repository.save(order);
 
         // Assert
-        String stdout = localStack.execInContainer("awslocal", "dynamodb", "scan", "--table-name", "orders")
+        var stdout = localStack.execInContainer("awslocal", "dynamodb", "scan", "--table-name", "orders")
                 .getStdout();
 
         assertThat(stdout)
@@ -78,13 +77,13 @@ public class OrderRepositoryTest {
     @DisplayName("OrderRepository should return an order when it exists in the table")
     void orderrepositoryShouldReturnAnOrderWhenItExistsInTheTable() throws IOException, InterruptedException {
         // Arrange
-        OrdersEntity order = generateNewOrder();
+        var order = generateNewOrder();
         localStack.execInContainer("awslocal", "dynamodb", "put-item",
                 "--table-name", "orders",
                 "--item", generateDynamoItem(order));
 
         // Act
-        Optional<OrdersEntity> query = repository.query(order.getId());
+        var query = repository.query(order.getId());
 
         // Assert
         assertThat(query).isPresent()
@@ -102,26 +101,26 @@ public class OrderRepositoryTest {
     @DisplayName("OrderRepository should return an empty optional when it does not exist in the table")
     void orderrepositoryShouldReturnAnEmptyOptionalWhenItDoesNotExistInTheTable() {
         // Arrange
-        OrdersEntity order = generateNewOrder();
+        var order = generateNewOrder();
 
         // Act
-        Optional<OrdersEntity> query = repository.query(order.getId());
+        var query = repository.query(order.getId());
 
         // Assert
         assertThat(query).isEmpty();
     }
 
     private static String generateDynamoItem(OrdersEntity order) {
-        String tableSchema = """
+        var tableSchema = """
                 {
                     "order_id": {"S": "%s"},
-                        "order_customer": {"S": "%s"},
-                        "order_origin": {"S": "%s"},
-                        "order_destination": {"S": "%s"},
-                        "order_weight": {"N": "%s"},
-                        "order_status": {"S": "%s"},
-                        "order_creation": {"S": "%s"}
-                    }
+                    "order_customer": {"S": "%s"},
+                    "order_origin": {"S": "%s"},
+                    "order_destination": {"S": "%s"},
+                    "order_weight": {"N": "%s"},
+                    "order_status": {"S": "%s"},
+                    "order_creation": {"S": "%s"}
+                }
                 """;
 
         return String.format(tableSchema,
@@ -135,7 +134,7 @@ public class OrderRepositoryTest {
     }
 
     private static OrdersEntity generateNewOrder() {
-        String zipCodePattern = "#d#d#d#d#d-#d#d#d";
+        var zipCodePattern = "#d#d#d#d#d-#d#d#d";
         return Instancio.of(OrdersEntity.class)
                 .set(Select.field(OrdersEntity::getId), UUID.randomUUID())
                 .set(Select.field(OrdersEntity::getCustomerId), UUID.randomUUID())

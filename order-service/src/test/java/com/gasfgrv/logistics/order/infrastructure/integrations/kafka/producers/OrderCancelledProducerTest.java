@@ -39,11 +39,11 @@ class OrderCancelledProducerTest {
     @DisplayName("Should send cancelled message through Kafka infrastructure")
     void shouldSendMessageThroughKafkaInfra() {
         // Arrange
-        Order order = Order.builder()
+        var order = Order.builder()
                 .id(UUID.randomUUID())
                 .build();
-        String reason = "Cancelled by user";
-        OrderCanceledEvent event = OrderCanceledEvent.newBuilder()
+        var reason = "Cancelled by user";
+        var event = OrderCanceledEvent.newBuilder()
                 .setOrderId(order.getIdValue())
                 .setReason(reason)
                 .build();

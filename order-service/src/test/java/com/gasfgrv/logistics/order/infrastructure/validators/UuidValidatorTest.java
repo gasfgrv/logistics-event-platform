@@ -28,11 +28,11 @@ class UuidValidatorTest {
     @DisplayName("UuidValidator must validate a UUID")
     void uuidValidatorMustValidateAUuid() {
         // Arrange
-        UUID uuid = UUID.fromString(Instancio.gen().text().uuid().get());
-        ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
+        var uuid = UUID.fromString(Instancio.gen().text().uuid().get());
+        var context = mock(ConstraintValidatorContext.class);
 
         // Act
-        boolean valid = uuidValidator.isValid(uuid, context);
+        var valid = uuidValidator.isValid(uuid, context);
 
         // Assert
         assertThat(valid).isTrue();
@@ -42,11 +42,11 @@ class UuidValidatorTest {
     @DisplayName("UuidValidator should report that a UUID is invalid")
     void uuidValidatorShouldReportThatAUuidIsInvalid() {
         // Arrange
-        UUID uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
+        var uuid = UUID.fromString("00000000-0000-0000-0000-000000000000");
+        var context = mock(ConstraintValidatorContext.class);
 
         // Act
-        boolean valid = uuidValidator.isValid(uuid, context);
+        var valid = uuidValidator.isValid(uuid, context);
 
         // Assert
         assertThat(valid).isFalse();

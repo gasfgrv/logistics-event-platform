@@ -28,12 +28,12 @@ class AddressAdapterTest {
     @DisplayName("AddressAdapter must validate an existing address")
     void addressadapterMustValidateAnExistingAddress() {
         // Arrange
-        String zipCode = generateZipCode();
-        AddressResponseDto address = generateClientResponse(zipCode, false);
+        var zipCode = generateZipCode();
+        var address = generateClientResponse(zipCode, false);
         doReturn(address).when(client).getAddress(zipCode);
 
         // Act
-        boolean existingAddress = adapter.isAnExistingAddress(zipCode);
+        var existingAddress = adapter.isAnExistingAddress(zipCode);
 
         // Assert
         assertThat(existingAddress).isTrue();
@@ -44,12 +44,12 @@ class AddressAdapterTest {
     @DisplayName("AddressAdapter must validate a non existing address")
     void addressadapterMustValidateANonExistingAddress() {
         // Arrange
-        String zipCode = generateZipCode();
-        AddressResponseDto address = generateClientResponse(zipCode, true);
+        var zipCode = generateZipCode();
+        var address = generateClientResponse(zipCode, true);
         doReturn(address).when(client).getAddress(zipCode);
 
         // Act
-        boolean existingAddress = adapter.isAnExistingAddress(zipCode);
+        var existingAddress = adapter.isAnExistingAddress(zipCode);
 
         // Assert
         assertThat(existingAddress).isFalse();

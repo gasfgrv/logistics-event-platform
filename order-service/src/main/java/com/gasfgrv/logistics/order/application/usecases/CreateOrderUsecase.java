@@ -23,7 +23,7 @@ public class CreateOrderUsecase implements UsecasePort<CreateOrderCommand> {
         command.getOrderAddresses()
                 .forEach(addressService::isValidAddress);
 
-        Order newOrder = orderService.createNewOrder(command.order());
+        var newOrder = orderService.createNewOrder(command.order());
 
         log.info("Saving order {} information", command.getOrderId());
         orderService.saveOrder(newOrder);

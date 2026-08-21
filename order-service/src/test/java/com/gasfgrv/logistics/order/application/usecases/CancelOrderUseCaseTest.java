@@ -22,10 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CancelOrderUseCaseTest {
@@ -40,10 +37,10 @@ class CancelOrderUseCaseTest {
     @DisplayName("Usecase must successfully cancel an order")
     void usecaseMustSuccessfullyCancelAnOrder() {
         // Arrange
-        Order order = instantiateOrder();
-        CancelOrderCommand command = instantiateCommand(order);
+        var order = instantiateOrder();
+        var command = instantiateCommand(order);
 
-        Order orderFound = instatiateServiceReturn(order.getId(), OrderStatus.CREATED);
+        var orderFound = instatiateServiceReturn(order.getId(), OrderStatus.CREATED);
 
         doReturn(Optional.of(orderFound))
                 .when(orderService).getOrder(command.getOrderId());
@@ -65,8 +62,8 @@ class CancelOrderUseCaseTest {
     @DisplayName("Usecase should throw a NonExistingOrderException when it cannot find the order")
     void usecaseShouldThrowANonExistingOrderExceptionWhenItCannotFindTheOrder() {
         // Arrange
-        Order order = instantiateOrder();
-        CancelOrderCommand command = instantiateCommand(order);
+        var order = instantiateOrder();
+        var command = instantiateCommand(order);
 
         doReturn(Optional.empty())
                 .when(orderService).getOrder(command.getOrderId());
@@ -84,9 +81,9 @@ class CancelOrderUseCaseTest {
     @DisplayName("Usecase should throw a OrderAlreadyBeenCancelled when order has already been cancelled")
     void usecaseShouldThrowAOrderAlreadyBeenCancelledWhenOrderHasAlreadyBeenCancelled() {
         // Arrange
-        Order order = instantiateOrder();
-        CancelOrderCommand command = instantiateCommand(order);
-        Order orderFound = instatiateServiceReturn(order.getId(), OrderStatus.CANCELLED);
+        var order = instantiateOrder();
+        var command = instantiateCommand(order);
+        var orderFound = instatiateServiceReturn(order.getId(), OrderStatus.CANCELLED);
 
         doReturn(Optional.of(orderFound))
                 .when(orderService).getOrder(command.getOrderId());

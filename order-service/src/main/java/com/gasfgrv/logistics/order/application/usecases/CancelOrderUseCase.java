@@ -23,14 +23,14 @@ public class CancelOrderUseCase implements UsecasePort<CancelOrderCommand> {
     @Override
     public void execute(CancelOrderCommand command) {
         log.info("Canceling the order {}", command.getOrderId());
-        Optional<Order> existingOrder = orderService.getOrder(command.getOrderId());
+        var existingOrder = orderService.getOrder(command.getOrderId());
 
         if (existingOrder.isEmpty()) {
             log.error("The order could not be found");
             throw new NonExistingOrderException();
         }
 
-        Order orderToBeCanceled = existingOrder.get();
+        var orderToBeCanceled = existingOrder.get();
 
         if (OrderStatus.CANCELLED.equals(orderToBeCanceled.getStatus())) {
             log.error("This order has already been cancelled");

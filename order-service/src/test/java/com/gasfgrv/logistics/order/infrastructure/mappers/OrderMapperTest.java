@@ -39,10 +39,10 @@ class OrderMapperTest {
     @DisplayName("OrderMapper should map OrdersEntity to Order")
     void orderMapperShouldMapOrdersEntityToOrder() {
         // Arrange
-        OrdersEntity entity = generateEntity();
+        var entity = generateEntity();
 
         // Act
-        Order domain = mapper.toDomain(entity);
+        var domain = mapper.toDomain(entity);
 
         // Assert
         assertThat(domain).isNotNull()
@@ -60,10 +60,10 @@ class OrderMapperTest {
     @DisplayName("OrderMapper should map Order to OrdersEntity")
     void orderMapperShouldMapOrderToOrdersEntity() {
         // Arrange
-        Order domain = generateDomain();
+        var domain = generateDomain();
 
         // Act
-        OrdersEntity entity = mapper.toEntity(domain);
+        var entity = mapper.toEntity(domain);
 
         // Assert
         assertThat(entity).isNotNull()
@@ -81,10 +81,10 @@ class OrderMapperTest {
     @DisplayName("OrderMapper should map Order to OrderCreatedEvent")
     void orderMapperShouldMapOrderToOrderCreatedEvent() {
         // Arrange
-        Order domain = generateDomain();
+        var domain = generateDomain();
 
         // Act
-        OrderCreatedEvent event = mapper.toCreatedEvent(domain);
+        var event = mapper.toCreatedEvent(domain);
 
         // Assert
         assertThat(event).isNotNull()
@@ -97,7 +97,7 @@ class OrderMapperTest {
         assertThat(event.getOrderId()).isEqualTo(domain.getId().toString());
         assertThat(event.getCustomerId()).isEqualTo(domain.getCustomerId().toString());
 
-        Double boxedWeight = Double.valueOf(event.getWeight());
+        var boxedWeight = Double.valueOf(event.getWeight());
         assertThat(boxedWeight.floatValue()).isEqualTo(domain.getWeight(), withPrecision(0.001f));
     }
 
@@ -105,11 +105,11 @@ class OrderMapperTest {
     @DisplayName("OrderMapper should map Order to OrderCanceledEvent")
     void orderMapperShouldMapOrderToOrderCanceledEvent() {
         // Arrange
-        Order domain = generateDomain();
-        String reason = Instancio.gen().text().word().verb().get();
+        var domain = generateDomain();
+        var reason = Instancio.gen().text().word().verb().get();
 
         // Act
-        OrderCanceledEvent event = mapper.toCanceledEvent(domain, reason);
+        var event = mapper.toCanceledEvent(domain, reason);
 
         // Assert
         assertThat(event).isNotNull()
@@ -124,10 +124,10 @@ class OrderMapperTest {
     @DisplayName("OrderMapper should map CreateOrderDto to CreateOrderCommand")
     void orderMapperShouldMapCreateOrderDtoToCreateOrderCommand() {
         // Arrange
-        CreateOrderDto dto = (CreateOrderDto) generateDto(DtoType.CREATE);
+        var dto = (CreateOrderDto) generateDto(DtoType.CREATE);
 
         // Act
-        CreateOrderCommand command = mapper.toCreateCommand(dto);
+        var command = mapper.toCreateCommand(dto);
 
         // Assert
         assertThat(command.order()).isNotNull()
@@ -142,10 +142,10 @@ class OrderMapperTest {
     @DisplayName("OrderMapper should map CancelOrderDto to CancelOrderCommand")
     void orderMapperShouldMapCancelOrderDtoToCancelOrderCommand() {
         // Arrange
-        CancelOrderDto dto = (CancelOrderDto) generateDto(DtoType.CANCEL);
+        var dto = (CancelOrderDto) generateDto(DtoType.CANCEL);
 
         // Act
-        CancelOrderCommand command = mapper.toCancelCommand(dto);
+        var command = mapper.toCancelCommand(dto);
 
         // Assert
         assertThat(command).isNotNull()
@@ -161,10 +161,10 @@ class OrderMapperTest {
     @DisplayName("OrderMapper should map CreateOrderDto to OrderResponseDto")
     void orderMapperShouldMapCreateOrderDtoToOrderResponseDto() {
         // Arranje
-        CreateOrderDto dto = (CreateOrderDto) generateDto(DtoType.CREATE);
+        var dto = (CreateOrderDto) generateDto(DtoType.CREATE);
 
         // Act
-        OrderResponseDto response = mapper.toResponse(dto);
+        var response = mapper.toResponse(dto);
 
         // Assert
         assertThat(response).isNotNull()

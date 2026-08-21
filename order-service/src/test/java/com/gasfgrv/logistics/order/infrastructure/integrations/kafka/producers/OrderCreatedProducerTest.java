@@ -41,12 +41,12 @@ class OrderCreatedProducerTest {
     @DisplayName("Should send message through Kafka infrastructure")
     void shouldSendMessageThroughKafkaInfra() {
         // Arrange
-        Order order = Instancio.of(Order.class)
+        var order = Instancio.of(Order.class)
                 .set(Select.field(Order::getId), UUID.randomUUID())
                 .create();
 
-        String pattern = "#d#d#d#d#d-#d#d#d";
-        OrderCreatedEvent event = Instancio.of(OrderCreatedEvent.class)
+        var pattern = "#d#d#d#d#d-#d#d#d";
+        var event = Instancio.of(OrderCreatedEvent.class)
                 .set(Select.field(OrderCreatedEvent::getOrderId), order.getId().toString())
                 .set(Select.field(OrderCreatedEvent::getCustomerId), UUID.randomUUID().toString())
                 .generate(Select.field(OrderCreatedEvent::getOrigin), gen -> gen.text().pattern(pattern))

@@ -41,13 +41,13 @@ class OrderServiceTest {
     @DisplayName("OrderService must create a new order")
     void orderServiceMustCreateNewOrder() {
         // Arrange
-        Instant instant = Instant.parse("2026-03-04T10:00:00Z");
-        String zipCodePattern = "#d#d#d#d#d-#d#d#d";
+        var instant = Instant.parse("2026-03-04T10:00:00Z");
+        var zipCodePattern = "#d#d#d#d#d-#d#d#d";
 
         doReturn(instant).when(clock).instant();
         doReturn(ZoneId.of("UTC")).when(clock).getZone();
 
-        Order orderData = Instancio.of(Order.class)
+        var orderData = Instancio.of(Order.class)
                 .set(Select.field(Order::getId), UUID.randomUUID())
                 .set(Select.field(Order::getCustomerId), UUID.randomUUID())
                 .generate(Select.field(Order::getOrigin), generator -> generator.text().pattern(zipCodePattern))
@@ -56,7 +56,7 @@ class OrderServiceTest {
                 .create();
 
         // Act
-        Order order = orderService.createNewOrder(orderData);
+        var order = orderService.createNewOrder(orderData);
 
         // Assert
         assertThat(order.getId())
@@ -81,7 +81,7 @@ class OrderServiceTest {
     @DisplayName("OrderService must cancel the order")
     void orderServiceMustCancelTheOrder() {
         // Arrange
-        Order order = new Order();
+        var order = new Order();
 
         // Act
         orderService.cancelOrder(order);
@@ -94,7 +94,7 @@ class OrderServiceTest {
     @DisplayName("OrderService must save the order")
     void orderServiceMustSaveTheOrder() {
         // Arrange
-        Order order = new Order();
+        var order = new Order();
 
         // Act
         orderService.saveOrder(order);
@@ -107,7 +107,7 @@ class OrderServiceTest {
     @DisplayName("OrderService must send the order to freight")
     void orderServiceMustSendTheOrderToFreight() {
         // Arrange
-        Order order = new Order();
+        var order = new Order();
 
         // Act
         orderService.sendToFreight(order);
@@ -120,8 +120,8 @@ class OrderServiceTest {
     @DisplayName("OrderService must notify the order cancelation")
     void orderServiceMustNotifyTheOrderCancelation() {
         // Arrange
-        Order order = new Order();
-        String reason = "Testing";
+        var order = new Order();
+        var reason = "Testing";
 
         // Act
         orderService.notifyCancellationOfTheOrder(order, reason);
@@ -134,14 +134,14 @@ class OrderServiceTest {
     @DisplayName("OrderService should return an order when queried")
     void orderServiceShouldReturnAnOrderWhenQueried() {
         // Arrange
-        Order order = Instancio.of(Order.class)
+        var order = Instancio.of(Order.class)
                 .set(Select.field(Order::getId), UUID.randomUUID())
                 .create();
 
         doReturn(Optional.of(order)).when(orderPort).getOrderInfo(order.getId());
 
         // Act
-        Optional<Order> orderOptional = orderService.getOrder(order.getId());
+        var orderOptional = orderService.getOrder(order.getId());
 
         // Assert
         assertThat(orderOptional).isNotEmpty();
@@ -156,14 +156,14 @@ class OrderServiceTest {
     @DisplayName("OrderService should return an empty object when queried")
     void orderServiceShouldReturnAnEmptyObjectWhenQueried() {
         // Arrange
-        Order order = Instancio.of(Order.class)
+        var order = Instancio.of(Order.class)
                 .set(Select.field(Order::getId), UUID.randomUUID())
                 .create();
 
         doReturn(Optional.empty()).when(orderPort).getOrderInfo(order.getId());
 
         // Act
-        Optional<Order> orderOptional = orderService.getOrder(order.getId());
+        var orderOptional = orderService.getOrder(order.getId());
 
         // Assert
         assertThat(orderOptional).isEmpty();
