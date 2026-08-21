@@ -23,14 +23,21 @@ public class KafkaConfiguration {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> kafkaListenerContainerFactory(KafkaProperties properties) {
-        DefaultKafkaConsumerFactory<String, SpecificRecord> consumerFactory = new DefaultKafkaConsumerFactory<>(properties.buildConsumerProperties());
-        ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory);
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, SpecificRecord>();
+        factory.setConsumerFactory(createListenerConsumerFactory(properties));
         factory.setRecordMessageConverter(new MessagingMessageConverter());
-        SimpleAsyncTaskExecutor executor = new SimpleAsyncTaskExecutor("kafka-vt-");
-        executor.setVirtualThreads(true);
-        factory.getContainerProperties().setListenerTaskExecutor(executor);
+        factory.getContainerProperties().setListenerTaskExecutor(createListenerExecutor());
         return factory;
+    }
+
+    private DefaultKafkaConsumerFactory<String, SpecificRecord> createListenerConsumerFactory(KafkaProperties properties) {
+        return new DefaultKafkaConsumerFactory<>(properties.buildConsumerProperties());
+    }
+
+    private SimpleAsyncTaskExecutor createListenerExecutor() {
+        var executor = new SimpleAsyncTaskExecutor("kafka-vt-");
+        executor.setVirtualThreads(true);
+        return executor;
     }
 
 }

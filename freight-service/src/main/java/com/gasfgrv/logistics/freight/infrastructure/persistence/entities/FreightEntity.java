@@ -53,4 +53,5 @@ public class FreightEntity {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
 }

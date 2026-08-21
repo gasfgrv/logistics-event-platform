@@ -23,8 +23,8 @@ public class DynamoDbTableRepository {
     }
 
     public Optional<FreightEntity> findBySortKey(UUID orderId) {
-        DynamoDbIndex<FreightEntity> index = table.index("order_id-index");
-        Key key = Key.builder()
+        var index = table.index("order_id-index");
+        var key = Key.builder()
                 .partitionValue(orderId.toString())
                 .build();
         return index.query(QueryConditional.keyEqualTo(key))

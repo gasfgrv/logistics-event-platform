@@ -1,6 +1,7 @@
 package com.gasfgrv.logistics.freight.application;
 
 import com.gasfgrv.logistics.freight.domain.exceptions.NoFreightACalculatedException;
+import com.gasfgrv.logistics.freight.domain.models.freight.Freight;
 import com.gasfgrv.logistics.freight.domain.models.order.Order;
 import com.gasfgrv.logistics.freight.domain.ports.in.CancellOrderFreightUsecasePort;
 import com.gasfgrv.logistics.freight.domain.ports.out.FreightRepositoryPort;
@@ -17,7 +18,7 @@ public class CancellOrderFreightUsecase implements CancellOrderFreightUsecasePor
 
     @Override
     public void cancelOrderFreight(Order order) {
-        boolean hasFreightAlreadyCalculated = repository.freightHasAlreadyBeenCalculatedForTheOrder(order.getId());
+        var hasFreightAlreadyCalculated = repository.freightHasAlreadyBeenCalculatedForTheOrder(order.getId());
 
         if (!hasFreightAlreadyCalculated) {
             log.error("Cannot cancel order freight: no freight has been calculated for order {}", order.getId());
@@ -26,10 +27,12 @@ public class CancellOrderFreightUsecase implements CancellOrderFreightUsecasePor
 
         log.info("Canceling order freight for order {}", order.getId());
         repository.getFreightByOrder(order.getId())
-                .ifPresent(freight -> {
-                    freight.setAsCancelled();
-                    notifier.notifyCancellation(freight);
-                });
+                .ifPresent(this::cancelAndNotify);
+    }
+
+    private void cancelAndNotify(Freight freight) {
+        freight.setAsCancelled();
+        notifier.notifyCancellation(freight);
     }
 
 }
